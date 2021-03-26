@@ -4,12 +4,12 @@ NZ COVID Tracer uses the COVID Green React Native Exposure Notification Service
 [plugin][1] to interface with the EN framework on the device.
 
 This plugin implements a risk scoring algorithm using the scoring method found 
-in iOS v1 and Android v1.5 of the EN framework.
+in iOS v2 and Android v1.6 of the EN framework.
 
-NZ COVID Tracer does not currently use the new "Exposure Windows" (iOS v2, 
-Android v1.6) verison of the EN framework.
+For iOS 13.5 and 13.6 and Android 6 and 7, the old 'V1' version of the scoring is
+implemented as a fallback. 
 
-![COVID Green Risk Scoring](../assets/en-scoring-explainer.png)
+![COVID Green Risk Scoring](../assets/en-scoring-explainer-v2.png)
 
 In summary:
 
@@ -21,6 +21,33 @@ In summary:
   re-calculates the Rolling Proximity Identifiers from those Diagnosis Keys
   and checks if there are any matching identifiers in the record on the device.
 
+- The device calculates the number of "meaningful exposure minutes" using the
+  appropriate risk scoring algorithm (either V1 or V2, as described below).
+ 
+- This calculation gives a risk score as "exposure minutes", i.e. the number of 
+  cumulative minutes this device has spent in proximity to other devices linked
+  to a confirmed positive case of COVID-19.
+
+- If this score is above a given threshold, the user is alerted through a push
+  notification and in-app message alerting them to appropriate next steps.
+
+
+V2 (iOS 12.5 and 13.7+, Android 8+):
+- If matching exposures are found they are fed into the risk scoring
+  calculation as follows:
+    - Sort each exposure into one of four buckets: _immediate_, _near_, 
+      _medium_ and _other_, based on the configured `attenuationDurationThresholds`.
+    - Multiply the minutes that the exposure took place by
+      `immediateDurationWeight`, `nearDurationWeight`, `mediumDurationWeight`,
+      or `otherDurationWeight` as appropriate. 
+    - Determine whether the exposure took place on a day with `high`, `standard`,
+      or no infectiousness based on the configured `infectiousnessForDaysSinceOnsetOfSymptoms`. 
+    - Multiply the minutes that the exposure took place by `infectiousnessStandardWeight`,
+      `infectiousnessHighWeight`, or 0 as appropriate.
+    - Repeat this process for each matching exposure and add together the results.
+
+
+V1 (iOS 13.5-13.6, Android 6-7):
 - If matching exposures are found they are fed into the risk scoring
   calculation as follows:
     - Sort each exposure into one of three buckets, _immediate_, _near_, and 
@@ -37,6 +64,8 @@ In summary:
 - If this score is above a given threshold, the user is alerted through a push
   notification and in-app message alerting them to appropriate next steps.
 
+Please see [configuration details as of version 4.0.0](./en-configuration.jsonc)
+for the current thresholds and attenuation settings. 
 
 [1]: https://github.com/covidgreen/react-native-exposure-notification-service
 [2]: https://developer.apple.com/documentation/exposurenotification/enexposureconfiguration/3583692-minimumriskscore

@@ -1,0 +1,93 @@
+{
+     //****************** EN V1 configuration parameters. ******************
+    "minimumRiskScore": 1,
+    "attenuationLevelValues": [2, 3, 4, 5, 6, 7, 8, 8],
+    "attenuationWeight": 1,
+    "daysSinceLastExposureLevelValues": [1, 1, 1, 1, 1, 1, 1, 1],
+    "daysSinceLastExposureWeight": 1,
+    "durationLevelValues": [1, 1, 1, 1, 1, 1, 1, 1],
+    "durationWeight": 1,
+    "transmissionRiskLevelValues": [1, 1, 1, 1, 1, 1, 1, 1],
+    "transmissionRiskWeight": 1,
+    "durationAtAttenuationThresholds": [56, 62],
+    "thresholdWeightings": [1, 0.5, 0],
+    "timeThreshold": 15,
+
+    //*************** EN V2 configuration parameters. *********************
+
+    // These values for iOS and Android respectively are used for the {limit} parameter in
+    // GET /api/exposures?since={since}&limit={limit} which gets called as part of an exposure check.
+    // It limits how many files are returned by the endpoint. However, according to the documentation
+    // here https://github.com/covidgreen/covid-green-backend-api/blob/4269cd1ac5a6f78fed6ce75e275d9026d35cd53a/lib/routes/exposures/index.js#L524
+    // at most one file will be returned and {limit} is no longer utilised by CVG backend.
+    // Therefore, this value makes no real difference, so we are keeping these properties at their defaults - 12.
+    "numFilesiOS": 12,
+    "numFilesAndroid": 12,
+
+    // This maps to thresholdWeightings[0] * 100%
+    "immediateDurationWeight": 100,
+
+    // This is one of the key differences between v1 and v2.
+    // In v1 durations at attenuation levels are calculated in 3 buckets as implemented by the plugin.
+    // In v2 durations at attenuation levels are calculated in 4 buckets as implemented by ENS itself.
+    "nearDurationWeight": 75,
+
+    // This maps to thresholdWeightings[1] * 100%
+    "mediumDurationWeight": 50,
+
+    // This maps to thresholdWeightings[2] * 100%
+    "otherDurationWeight": 0,
+
+    // These properties participate in v2 calculation to determine the risk score.
+    // In our v1 implementation the notification criterion is that the sum of weighted durations at attenuation levels exceed timeThreshold.
+    // We were also ignoring the risk score calculated in ENS by setting minimumRiskScore to 1, which means:
+    // Allow any match to be returned by ENS so that it can be evaluated according to the above criterion.
+    // For reference, the new risk calculation logic is described here - https://developer.apple.com/documentation/exposurenotification/enexposureconfiguration
+    "infectiousnessStandardWeight": 100,
+    "infectiousnessHighWeight": 100,
+    "reportTypeConfirmedTestWeight": 100,
+    "reportTypeConfirmedClinicalDiagnosisWeight": 100,
+    "reportTypeSelfReportedWeight": 100,
+    "reportTypeRecursiveWeight": 100,
+
+    // This property is used for selecting the right report type weight when report type isn't specified.
+    // Given we normally only ask confirmed cases to upload their TEKs, we default it Confirmed = 1.
+    // However, this value doesn't actually make any difference as risk scores aren't utilised.
+    "reportTypeNoneMap": 1,
+
+    // A threshold for additional filtering to limit the number of days to consider when calculating the risk level.
+    // 0 means that all days will always be taken into account, i.e. no filtering.
+    // However, since we aren't utilising the risk score, this value doesn't make any difference.
+    "daysSinceLastExposureThreshold": 0,
+
+    // This value is similar to minimumRiskScore - it is a risk threshold for a positive detection result.
+    // The difference between the two seems to be that it's used with the new v2 APIs when analysing an ExposureWindow.
+    // We want all matches to be detected, therefore we are keeping it at its default of 1.
+    "minimumRiskScoreFullRange": 1,
+
+    // This is an array for choosing the weight between infectiousnessHighWeight, infectiousnessStandardWeight and an implicit infectiousnessNoneWeight 
+    // (which isn't configurable and is always equal to 0%) for the range from -14 to +14 days deom the current time.
+    // A value of 2 in the array selects infectiousnessHighWeight for its corresponding day.
+    // A value of 1 in the array selects infectiousnessStandardWeight for its corresponding day.
+    // A value of 0 in the array selects 0% for its corresponding day.
+    // Given risk score isn't utilised and weights are kept at defaults, this array is populated with 1s.
+    "infectiousnessForDaysSinceOnsetOfSymptoms": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+
+    // This maps to thresholdWeightings so that:
+    // - attenuationDurationThresholds[0] = thresholdWeightings[0]
+    // - attenuationDurationThresholds[1] = AVERAGE(thresholdWeightings[0], thresholdWeightings[1])
+    // - attenuationDurationThresholds[2] = thresholdWeightings[1]
+    // In v2 there is one more threshold than in in-plugin implementation for v1 (refer to the comment for nearDurationWeight).
+    // The new threshold here is chosen in agreement with the value choosen for nearDurationWeight - we are introducing one new threshold
+    // between the existing two, and therefore the corresponding new bucket is weighted as an average weight of its previous and next buckets.
+    "attenuationDurationThresholds": [56,59,62],
+
+    // This is a property implemented by the plugin. This enables v2 calculation for devices that support v2 mode.
+    "v2Mode": true,
+
+    // This is another property implemented by the plugin. It switches between risk-based exposure detection (false)
+    // and detection based on meaningful exposure time (true). The latter is consistent with how the plugin is currently configured in v1.
+    // Therefore, exposure notification will trigger for v2 devices if the sum of durations at attenuation levels weighted by the new 
+    // weights (immediateDurationWeight, nearDurationWeight, mediumDurationWeight and otherDurationWeight) exceeds timeThreshold
+    "contiguousMode": true
+}
