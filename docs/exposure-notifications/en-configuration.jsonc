@@ -1,5 +1,6 @@
 {
      //****************** EN V1 configuration parameters. ******************
+     // These parameters are used by older devices that do not support EN V2 risk scoring.
     "minimumRiskScore": 1,
     "attenuationLevelValues": [2, 3, 4, 5, 6, 7, 8, 8],
     "attenuationWeight": 1,
@@ -9,8 +10,8 @@
     "durationWeight": 1,
     "transmissionRiskLevelValues": [1, 1, 1, 1, 1, 1, 1, 1],
     "transmissionRiskWeight": 1,
-    "durationAtAttenuationThresholds": [56, 62],
-    "thresholdWeightings": [1, 0.5, 0],
+    "durationAtAttenuationThresholds": [56, 70],
+    "thresholdWeightings": [1.5, 0.7, 0],
     "timeThreshold": 15,
 
     //*************** EN V2 configuration parameters. *********************
@@ -25,15 +26,15 @@
     "numFilesAndroid": 12,
 
     // This maps to thresholdWeightings[0] * 100%
-    "immediateDurationWeight": 100,
+    "immediateDurationWeight": 150,
 
     // This is one of the key differences between v1 and v2.
     // In v1 durations at attenuation levels are calculated in 3 buckets as implemented by the plugin.
     // In v2 durations at attenuation levels are calculated in 4 buckets as implemented by ENS itself.
-    "nearDurationWeight": 75,
+    "nearDurationWeight": 100,
 
     // This maps to thresholdWeightings[1] * 100%
-    "mediumDurationWeight": 50,
+    "mediumDurationWeight": 40,
 
     // This maps to thresholdWeightings[2] * 100%
     "otherDurationWeight": 0,
@@ -78,9 +79,7 @@
     // - attenuationDurationThresholds[1] = AVERAGE(thresholdWeightings[0], thresholdWeightings[1])
     // - attenuationDurationThresholds[2] = thresholdWeightings[1]
     // In v2 there is one more threshold than in in-plugin implementation for v1 (refer to the comment for nearDurationWeight).
-    // The new threshold here is chosen in agreement with the value choosen for nearDurationWeight - we are introducing one new threshold
-    // between the existing two, and therefore the corresponding new bucket is weighted as an average weight of its previous and next buckets.
-    "attenuationDurationThresholds": [56,59,62],
+    "attenuationDurationThresholds": [55,63,70],
 
     // This is a property implemented by the plugin. This enables v2 calculation for devices that support v2 mode.
     "v2Mode": true,
