@@ -10,9 +10,9 @@ exposure. The alert is delivered to a device with two methods:
  - by polling a public endpoint containing all active exposure events when 
    the app returns to the foreground.
 
-If a matching GLN within the given time range is found on the device the user 
-will see a notification message on their device. This matching process happens 
-on the device, to preserve the user's privacy.
+If a diary entry with a matching GLN within the time range is found on the
+device the user will see a notification message on their device. This matching
+process happens on the device, to preserve the user's privacy.
 
 ![Contact Alerts](../assets/uc3-contact-alerts.png)
 
@@ -66,7 +66,7 @@ follows:
      discarded silently and the user is not notified:
       1. Check a notification has not previously been shown for this Exposure 
          Event ID
-      2. Search the local database for a matching diary 
+      2. Search the local database for a matching diary entry
       3. A match is determined where the entry has the same GLN SHA384 hash, 
          and the check-in time is contained within the start time and end time
          of the notification
