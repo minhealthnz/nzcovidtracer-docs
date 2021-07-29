@@ -57,7 +57,7 @@ Innovation, and Employment. Organisation Parts are based on NZS ISO/IEC
 ### Adding an entry with near-field communication (NFC)
 
 Support for adding a diary entry through NFC tags was added in version 6.0.
-[The schema is detailed here](./docs/functions/nfc.md).
+[The schema is detailed here](../functions/nfc.md).
 
 Like scanning in with a QR code:
 - The tag contains the name, address, and GLN of the location.  
