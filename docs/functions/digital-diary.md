@@ -16,9 +16,9 @@ Each time the app returns to the foreground entries that have been created more
 than 60 days ago are automatically deleted, in line with clinical advice on the 
 amount of data that is necessary to support a case investigation.
 
-If a user uses multiple phones a separate diary is kept on each device. This 
-solution does not implement a function to share a diary between devices. This
-means if the app is uninstalled any diary entries on the device will be lost.
+If a user uses multiple phones a separate diary is kept on each device. 
+As of version 6.1.0, the diary can be exported from one device and imported
+to another, to enable migration to a new device. 
 
 <details>
 <summary>Component model diagram</summary>
@@ -36,7 +36,8 @@ created by:
   3. Manually creating a diary entry with details from a previous scanned 
      entry <sup>v6.0</sup>
   4. Manually creating a diary entry with location name and time of arrival
-     written in free text. 
+     written in free text
+  5. Opening a link in NZ COVID Tracer <sup>v6.1.0</sup>
 
 A free-text description can also be added at the time of creation or by editing.
 
@@ -70,6 +71,24 @@ place that they've visited within the diary retention period or that has
 been saved. They can also manually add a diary entry that does not have a
 GLN attached by writing in a location name and time of visit.
 
+### Adding an entry through a link
+
+As of release 6.1.0, a user can add a diary entry by following a link that contains
+the information in a QR code. 
+
+This enables third-party developers to add a link into their app or website for their
+customers to add a diary entry, or for users to enable automation to prompt them to
+add an entry when they arrive at a place they go regularly. 
+
+The format of the link should be:
+https://tracing.covid19.govt.nz/scan?source=url#data=...
+This should be followed by the same information contained in a QR code poster,
+e.g. NZCOVIDTRACER:eyJ0eXAiOiJlbnRyeSIsImdsbiI6IlRlc3QiLCJvcG4iOiJUZXN0IiwiYWRyIjoiVGVzdCIsInZlciI6ImMxOToxIn0=
+
+Like scanning in with a QR code:
+- The tag contains the name, address, and GLN of the location.  
+- No information about where you have scanned in leaves your device. 
+
 ## Viewing, editing, and deleting diary entries
 
 The diary can be accessed from the "My Data" tab or the top right of the "Record a Visit" tab.
@@ -81,6 +100,14 @@ and are denoted in the diary with this icon.
 ![Written Entry](../assets/written-entry.png) Diary entries created manually 
 with no GLN attached ('written entries') are denoted in the diary with this icon. 
 
+## Exporting and importing the digital diary
+
+As of version 6.1.0, a user can export a file containing the contents of their digital diary
+by going to the diary screen, tapping on 'options' and then 'export this diary'. 
+This exports the diary into a JSON file named in the format YYYY-MM-DD.diary, and
+prompts the user to save a file into a secure cloud location. 
+This file can then be imported on to another device by going to the diary screen, tapping on
+'options' and then 'import another diary', and selecting the `.diary` file to be imported.
 
 ## Saved locations
 
