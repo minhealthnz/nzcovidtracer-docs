@@ -26,7 +26,7 @@
     "numFilesAndroid": 12,
 
     // This maps to thresholdWeightings[0] * 100%
-    "immediateDurationWeight": 150,
+    "immediateDurationWeight": 175,
 
     // This is one of the key differences between v1 and v2.
     // In v1 durations at attenuation levels are calculated in 3 buckets as implemented by the plugin.
@@ -34,7 +34,7 @@
     "nearDurationWeight": 100,
 
     // This maps to thresholdWeightings[1] * 100%
-    "mediumDurationWeight": 40,
+    "mediumDurationWeight": 33,
 
     // This maps to thresholdWeightings[2] * 100%
     "otherDurationWeight": 0,
@@ -72,14 +72,15 @@
     // A value of 1 in the array selects infectiousnessStandardWeight for its corresponding day.
     // A value of 0 in the array selects 0% for its corresponding day.
     // Given risk score isn't utilised and weights are kept at defaults, this array is populated with 1s.
-    "infectiousnessForDaysSinceOnsetOfSymptoms": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    // Days 10-14 are scored with 0 so that people aren't notified of exposures more than 10 days ago.
+    "infectiousnessForDaysSinceOnsetOfSymptoms": [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
 
     // This maps to thresholdWeightings so that:
     // - attenuationDurationThresholds[0] = thresholdWeightings[0]
     // - attenuationDurationThresholds[1] = AVERAGE(thresholdWeightings[0], thresholdWeightings[1])
     // - attenuationDurationThresholds[2] = thresholdWeightings[1]
     // In v2 there is one more threshold than in in-plugin implementation for v1 (refer to the comment for nearDurationWeight).
-    "attenuationDurationThresholds": [55,63,70],
+    "attenuationDurationThresholds": [55,67,75],
 
     // This is a property implemented by the plugin. This enables v2 calculation for devices that support v2 mode.
     "v2Mode": true,
