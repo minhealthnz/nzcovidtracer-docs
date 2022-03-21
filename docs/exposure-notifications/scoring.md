@@ -64,8 +64,8 @@ V1 (iOS 13.5-13.6, Android 6-7):
 - If this score is above a given threshold, the user is alerted through a push
   notification and in-app message alerting them to appropriate next steps.
 
-Configuration details are based on the [Linux Foundation for Public Health narrow-net consensus configuration](https://github.com/lfph/gaen-risk-scoring/blob/main/risk-scoring.md). 
-Please see [configuration details as of version 5.0.0](./en-configuration.jsonc)
+Configuration details are based on Narrow Net V2 from the [Linux Foundation for Public Health narrow-net consensus configuration](https://github.com/lfph/gaen-risk-scoring/blob/main/risk-scoring.md). 
+Please see [configuration details as of version 6.1.0](./en-configuration.jsonc)
 for the current thresholds and attenuation settings. 
 
 [1]: https://github.com/covidgreen/react-native-exposure-notification-service
